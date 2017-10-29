@@ -12,6 +12,7 @@ type Msg =
     GotoEntityView String |
     FetchFarmListCompleted (Result Http.Error String) |
     FetchEntityListCompleted (Result Http.Error String) |
-    FetchEntityCompleted (Result Http.Error String) |                                                   SetFarmListTableState Table.State |
+    FetchEntityCompleted (Result Http.Error String) |
+    SetFarmListTableState Table.State |
     SetEntityListTableState Table.State
         

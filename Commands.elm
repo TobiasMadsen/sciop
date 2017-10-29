@@ -44,11 +44,6 @@ fetchEntity farmId entityId =
                  , timeout = Nothing
                  , withCredentials = False
                  }
-                       
-                       
---    Http.getString (api ++ "entities/farms/" ++ farmId ++ "/entities/" ++ entityId)
-
-
         
 fetchEntityCmd : String -> String -> Cmd Msg
 fetchEntityCmd farmId entityId =

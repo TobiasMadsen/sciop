@@ -7,7 +7,8 @@ import Html exposing (Html, Attribute, button, div, text, program, a, table, h2)
 import Html.Events exposing (onClick)
 import Plot exposing (..)
 import List.Extra exposing (zip)
--- VIEW FARMLIST
+
+-- CONFIGURATIONS FOR FARMLIST TABLE
 
 configFarmTable : Table.Config Farm Msg
 configFarmTable =
@@ -26,7 +27,7 @@ toRowAttrsFarmTable farm =
   [ onClick (GotoFarmView farm.id)
   ]
 
--- VIEW ENTITYLIST
+-- CONFIGURATIONS FOR ENTITYLIST TABLE
 
 configEntityTable : Table.Config EntityListElem Msg
 configEntityTable =
@@ -46,19 +47,17 @@ toRowAttrsEntityTable entityListElem =
   [ onClick (GotoEntityView entityListElem.id)
   ]
 
--- VIEW ENTITY
+-- CREATE PLOTTING DATASTRUCTURE FOR TEMPERATURE PLOT
+-- TODO: PARSE DATE STRING
 
-
-
-entityTemperaturesData : Entity -> (List (Float, Float))
-entityTemperaturesData entity =
+temperaturePlotData : Entity -> (List (Float, Float))
+temperaturePlotData entity =
     let
         indices = List.map toFloat (List.range 1 (List.length entity.temperatures))
     in
         zip indices (List.map toFloat (List.map .measurement entity.temperatures))
                    
 -- VIEW
-
 view : Model -> Html Msg
 view model =
     case model.viewState of
@@ -81,6 +80,6 @@ view model =
                 , div [] [ text (model.entity.status ++ " " ++ model.entity.sex)]
                 , div [] [ viewSeries
                                [ area (List.map (\( x, y ) -> circle x y)) ]
-                               (entityTemperaturesData model.entity)
+                               (temperaturePlotData model.entity)
                          ]
                 ]
