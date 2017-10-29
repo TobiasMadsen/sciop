@@ -1,4 +1,4 @@
-module Commands exposing (fetchFarmListCmd, fetchEntityListCmd)
+module Commands exposing (fetchFarmListCmd, fetchEntityListCmd, fetchEntityCmd)
 
 import Msgs exposing (..)
 import Config exposing (api)
@@ -24,3 +24,16 @@ fetchEntityList farmId =
 fetchEntityListCmd : String -> Cmd Msg
 fetchEntityListCmd farmId =
     Http.send FetchEntityListCompleted (fetchEntityList farmId)
+
+-- FETCH ENTITY COMMAND
+
+fetchEntity : String -> String -> Http.Request String
+fetchEntity farmId entityId =
+    Http.getString (api ++ "/entities/farms/" ++ farmId ++ "/entities/" ++ entityId)
+
+fetchEntityCmd : String -> String -> Cmd Msg
+fetchEntityCmd farmId entityId =
+    Http.send FetchEntityCompleted (fetchEntity farmId entityId)
+        
+
+        

@@ -9,7 +9,9 @@ import Table
 type Msg =
     GotoFarmListView |
     GotoFarmView String |
-    GotoEntityView |
+    GotoEntityView String |
     FetchFarmListCompleted (Result Http.Error String) |
     FetchEntityListCompleted (Result Http.Error String) |
-    SetTableState Table.State
+    FetchEntityCompleted (Result Http.Error String) |                                                   SetFarmListTableState Table.State |
+    SetEntityListTableState Table.State
+        

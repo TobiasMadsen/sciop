@@ -12,16 +12,16 @@ configFarmTable : Table.Config Farm Msg
 configFarmTable =
   Table.customConfig
     { toId = .id
-    , toMsg = SetTableState
+    , toMsg = SetFarmListTableState
     , columns =
         [ Table.stringColumn "Id" .id
         , Table.stringColumn "Name" .name
         ]
-    , customizations = { defaultCustomizations | rowAttrs = toRowAttrs }
+    , customizations = { defaultCustomizations | rowAttrs = toRowAttrsFarmTable }
     }
 
-toRowAttrs : Farm -> List (Attribute Msg)
-toRowAttrs farm =
+toRowAttrsFarmTable : Farm -> List (Attribute Msg)
+toRowAttrsFarmTable farm =
   [ onClick (GotoFarmView farm.id)
   ]
 
@@ -29,16 +29,21 @@ toRowAttrs farm =
 
 configEntityTable : Table.Config Entity Msg
 configEntityTable =
-  Table.config
+  Table.customConfig
     { toId = .id
-    , toMsg = SetTableState
+    , toMsg = SetEntityListTableState
     , columns =
         [ Table.stringColumn "Id" .id
         , Table.stringColumn "StartDate" .startDate
         , Table.stringColumn "EndDate" .endDate
         ]
+    , customizations = { defaultCustomizations | rowAttrs = toRowAttrsEntityTable}
     }
-
+      
+toRowAttrsEntityTable : Entity -> List (Attribute Msg)
+toRowAttrsEntityTable entity =
+  [ onClick (GotoEntityView entity.id)
+  ]
 
 
 -- VIEW
@@ -49,18 +54,18 @@ view model =
         FarmListView  ->
             div []
                 [ a [ onClick GotoFarmListView ] [ text "Farms" ]
-                , div [] [ Table.view configFarmTable model.farmlistTableState model.farmList ]
+                , div [] [ Table.view configFarmTable model.farmListTableState model.farmList ]
                 ]
         FarmView ->
             div []
                 [ a [ onClick GotoFarmListView ] [ text "Farms>>" ]
                 , a [ onClick (GotoFarmView model.farmId)] [ text ("FarmView " ++ model.farmId) ]
-                , div [] [ Table.view configEntityTable model.entitylistTableState model.entityList]
+                , div [] [ Table.view configEntityTable model.entityListTableState model.entityList]
                 ]
         EntityView ->
             div []
                 [ a [ onClick GotoFarmListView ] [ text "FarmListView>>" ]
                 , a [ onClick (GotoFarmView model.farmId)] [ text ("FarmView " ++ model.farmId ++ ">>") ]                      
-                , a [ onClick GotoEntityView ] [ text "EntityView" ]
+                , a [ onClick (GotoEntityView model.entityId) ] [ text "EntityView" ]
                 , div [] [text "EntityView"]
                 ]

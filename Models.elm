@@ -13,20 +13,20 @@ type alias Entity = { id : String, startDate : String, endDate : String}
 type ViewState = FarmListView | FarmView | EntityView
 type alias Model = { viewState : ViewState,
                      farmId : String,
-                     entityId : Int,
+                     entityId : String,
                      farmList : List Farm ,
                      entityList : List Entity,
-                     farmlistTableState : Table.State,
-                     entitylistTableState : Table.State
+                     farmListTableState : Table.State,
+                     entityListTableState : Table.State
                      }
 
 init : ( Model, Cmd Msg )
 init =
     ( { viewState = FarmListView,
         farmId = "",
-        entityId = -1,
+        entityId = "",
         farmList = [],
         entityList = [],
-        farmlistTableState = Table.initialSort "id",
-        entitylistTableState = Table.initialSort "id"
+        farmListTableState = Table.initialSort "id",
+        entityListTableState = Table.initialSort "id"
       }, fetchFarmListCmd )

@@ -14,16 +14,20 @@ update msg model =
     case msg of
         GotoFarmListView ->
             ( {model | viewState = FarmListView} , Cmd.none )
-        GotoFarmView farmId->
+        GotoFarmView farmId ->
             ( {model | viewState = FarmView, farmId = farmId}, fetchEntityListCmd farmId )
-        GotoEntityView ->
-            ( {model | viewState = EntityView}, Cmd.none)
+        GotoEntityView entityId ->
+            ( {model | viewState = EntityView, entityId = entityId}, fetchEntityCmd model.farmId entityId)
         FetchFarmListCompleted result ->
             fetchFarmListCompleted model result
         FetchEntityListCompleted result ->
             fetchEntityListCompleted model result
-        SetTableState newState ->
-            ( { model | farmlistTableState = newState }, Cmd.none )
+        FetchEntityCompleted result ->
+            fetchEntityCompleted model result                
+        SetFarmListTableState newState ->
+            ( { model | farmListTableState = newState }, Cmd.none )
+        SetEntityListTableState newState ->
+            ( { model | entityListTableState = newState }, Cmd.none )
 
 -- PARSE FARM LIST
 
@@ -71,3 +75,8 @@ fetchEntityListCompleted model result =
                     
             Err errStr ->
                 ( {model | entityList = [{id = (toString errStr), startDate = "hej", endDate = "du"}] }, Cmd.none )
+
+-- PARSE ENTITY
+fetchEntityCompleted : Model -> Result Http.Error String -> (Model, Cmd Msg)
+fetchEntityCompleted model result =
+    (model, Cmd.none)
