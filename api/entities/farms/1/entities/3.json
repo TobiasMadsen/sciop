@@ -1,0 +1,26 @@
+{
+    "Status": "Active",
+    "Entity": "3",
+    "StartDate": "2017-05-27T22:00:00+0000",
+    "EndDate": "1899-11-29T23:00:00+0000",
+    "Farm": "1",
+    "Sex": "Male",
+    "EntityAgeDays": 3,
+    "Temperatures": [{
+            "Time": "2017-05-27T22:12:00+0000",
+            "Measurement": 22
+        },
+        {
+            "Time": "2017-05-28T08:12:00+0000",
+            "Measurement": 24
+        },
+        {
+            "Time": "2017-05-29T08:27:00+0000",
+            "Measurement": 26
+        }
+    ],
+    "Weights": [{
+        "Date": "2017-05-27T22:00:00+0000",
+        "Weightg": 43
+    }]
+}
