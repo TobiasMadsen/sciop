@@ -4,7 +4,7 @@ import Models exposing (..)
 import Msgs exposing (..)
 import Commands exposing(..)
 
-import Json.Decode exposing (map2, map3, field, int, string, decodeString, list)
+import Json.Decode exposing (map2, map3, map7, field, int, string, decodeString, list)
 import Http
 
 -- UPDATE
@@ -66,7 +66,7 @@ fetchEntityListCompleted model result =
                     Ok entityList ->
                         entityList
                     Err _  ->
-                        [{id = "Error 2", startDate = "hej", endDate = "du"}]
+                        []
                     
     in
         case result of
@@ -74,9 +74,29 @@ fetchEntityListCompleted model result =
                 ( {model | entityList = entityListDecoder json}, Cmd.none )
                     
             Err errStr ->
-                ( {model | entityList = [{id = (toString errStr), startDate = "hej", endDate = "du"}] }, Cmd.none )
+                ( {model | entityList = [{id = toString errStr, startDate = "", endDate = ""}] }, Cmd.none )
 
 -- PARSE ENTITY
+temperatureDecoder = list (map2 TemperatureMeasurement (field "Time" string) (field "Measurement" int))
+weightDecoder = list (map2 WeightMeasurement (field "Date" string) (field "Weightg" int))
+entityDecoder = map7 Entity (field "Status" string) (field "StartDate" string) (field "EndDate" string) (field "Sex" string) (field "EntityAgeDays" int) (field "Temperatures" temperatureDecoder) (field "Weights" weightDecoder)
+entityDecoderResult: String -> Entity                
+entityDecoderResult json =
+    let
+        result = decodeString entityDecoder json
+    in
+        -- Handle errors in parsing Json
+        case result of
+            Ok entity ->
+                entity
+            Err errStr ->
+                {defaultEntity | status = toString errStr}
+    
 fetchEntityCompleted : Model -> Result Http.Error String -> (Model, Cmd Msg)
 fetchEntityCompleted model result =
-    (model, Cmd.none)
+    -- Handle errors in Http request
+    case result of
+        Ok json -> 
+            ( {model | entity = (entityDecoderResult json)}, Cmd.none)
+        Err errStr ->
+            ( {model | entity = {defaultEntity | status = toString errStr}}, Cmd.none)

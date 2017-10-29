@@ -19,7 +19,14 @@ fetchFarmListCmd =
 
 fetchEntityList : String -> Http.Request String
 fetchEntityList farmId =
-    Http.getString (api ++ "/entities/farms/" ++ farmId ++ "/entities/entities.json")
+    Http.request { method = "GET"
+                 , headers = [(Http.header "accept" "application/json")]
+                 , url = (api ++ "entities/farms/" ++ farmId ++ "/entities/entities.json")
+                 , body = Http.emptyBody
+                 , expect = Http.expectString
+                 , timeout = Nothing
+                 , withCredentials = False
+                 }
 
 fetchEntityListCmd : String -> Cmd Msg
 fetchEntityListCmd farmId =
@@ -29,11 +36,24 @@ fetchEntityListCmd farmId =
 
 fetchEntity : String -> String -> Http.Request String
 fetchEntity farmId entityId =
-    Http.getString (api ++ "/entities/farms/" ++ farmId ++ "/entities/" ++ entityId)
+    Http.request { method = "GET"
+                 , headers = [(Http.header "accept" "application/json")]
+                 , url = (api ++ "entities/farms/" ++ farmId ++ "/entities/" ++ entityId ++ ".json")
+                 , body = Http.emptyBody
+                 , expect = Http.expectString
+                 , timeout = Nothing
+                 , withCredentials = False
+                 }
+                       
+                       
+--    Http.getString (api ++ "entities/farms/" ++ farmId ++ "/entities/" ++ entityId)
 
+
+        
 fetchEntityCmd : String -> String -> Cmd Msg
 fetchEntityCmd farmId entityId =
     Http.send FetchEntityCompleted (fetchEntity farmId entityId)
+                                             
         
 
         

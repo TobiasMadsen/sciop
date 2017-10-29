@@ -5,7 +5,8 @@ import Msgs exposing (..)
 import Table exposing (defaultCustomizations)
 import Html exposing (Html, Attribute, button, div, text, program, a, table, h2)
 import Html.Events exposing (onClick)
-
+import Plot exposing (..)
+import List.Extra exposing (zip)
 -- VIEW FARMLIST
 
 configFarmTable : Table.Config Farm Msg
@@ -45,7 +46,17 @@ toRowAttrsEntityTable entityListElem =
   [ onClick (GotoEntityView entityListElem.id)
   ]
 
+-- VIEW ENTITY
 
+
+
+entityTemperaturesData : Entity -> (List (Float, Float))
+entityTemperaturesData entity =
+    let
+        indices = List.map toFloat (List.range 1 (List.length entity.temperatures))
+    in
+        zip indices (List.map toFloat (List.map .measurement entity.temperatures))
+                   
 -- VIEW
 
 view : Model -> Html Msg
@@ -64,8 +75,12 @@ view model =
                 ]
         EntityView ->
             div []
-                [ a [ onClick GotoFarmListView ] [ text "FarmListView>>" ]
-                , a [ onClick (GotoFarmView model.farmId)] [ text ("FarmView " ++ model.farmId ++ ">>") ]                      
-                , a [ onClick (GotoEntityView model.entityId) ] [ text "EntityView" ]
-                , div [] [text "EntityView"]
+                [ a [ onClick GotoFarmListView ] [ text "Farm>>" ]
+                , a [ onClick (GotoFarmView model.farmId)] [ text ("FarmView " ++ model.farmId ++ ">>")]
+                , a [ onClick (GotoEntityView model.entityId) ] [ text ("EntityView " ++ model.entityId) ]
+                , div [] [ text (model.entity.status ++ " " ++ model.entity.sex)]
+                , div [] [ viewSeries
+                               [ area (List.map (\( x, y ) -> circle x y)) ]
+                               (entityTemperaturesData model.entity)
+                         ]
                 ]
