@@ -27,7 +27,7 @@ toRowAttrsFarmTable farm =
 
 -- VIEW ENTITYLIST
 
-configEntityTable : Table.Config Entity Msg
+configEntityTable : Table.Config EntityListElem Msg
 configEntityTable =
   Table.customConfig
     { toId = .id
@@ -40,9 +40,9 @@ configEntityTable =
     , customizations = { defaultCustomizations | rowAttrs = toRowAttrsEntityTable}
     }
       
-toRowAttrsEntityTable : Entity -> List (Attribute Msg)
-toRowAttrsEntityTable entity =
-  [ onClick (GotoEntityView entity.id)
+toRowAttrsEntityTable : EntityListElem -> List (Attribute Msg)
+toRowAttrsEntityTable entityListElem =
+  [ onClick (GotoEntityView entityListElem.id)
   ]
 
 

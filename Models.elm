@@ -8,14 +8,14 @@ import Table
 -- MODEL
 
 type alias Farm = { id : String, name : String }
-type alias Entity = { id : String, startDate : String, endDate : String}
+type alias EntityListElem = { id : String, startDate : String, endDate : String}
     
 type ViewState = FarmListView | FarmView | EntityView
 type alias Model = { viewState : ViewState,
                      farmId : String,
                      entityId : String,
                      farmList : List Farm ,
-                     entityList : List Entity,
+                     entityList : List EntityListElem,
                      farmListTableState : Table.State,
                      entityListTableState : Table.State
                      }

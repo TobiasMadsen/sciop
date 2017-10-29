@@ -57,10 +57,10 @@ fetchFarmListCompleted model result =
 fetchEntityListCompleted : Model -> Result Http.Error String -> (Model, Cmd Msg)
 fetchEntityListCompleted model result =
     let
-        entity = map3 Entity (field "id" string) (field "startDate" string) (field "endDate" string)
+        entityListElem = map3 EntityListElem (field "id" string) (field "startDate" string) (field "endDate" string)
         entityListDecoder json =
             let
-                entityListDecodeResult = (decodeString (list entity) json)
+                entityListDecodeResult = (decodeString (list entityListElem) json)
             in
                 case entityListDecodeResult of
                     Ok entityList ->
